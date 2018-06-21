@@ -3,7 +3,7 @@ var exec = require('child_process').exec
 var fs = require('fs')
 
 var files = glob.sync('vendor/src/*.c')
-var command = 'emcc supercop.c ' + files.join(' ') + ' -o lib.js -O1'
+var command = 'emcc supercop.c ' + files.join(' ') + ' -o lib.js -O1 -s WASM=0'
 var child = exec(command, function(err){
   if(err){
     throw err
