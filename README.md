@@ -1,5 +1,10 @@
-# supercop.js
+# supercop.js (DFINITY variant)
 [orlp/ed25519](https://github.com/orlp/ed25519) compiled to pure javascript using Emscripten
+
+## modifications
+The [public key generation](https://tools.ietf.org/html/rfc8032#section-5.1.5) has been changed as follows:
+
+The private key is not hashed (skips step 1). The private key is directly pruned and used as a scalar (steps 2-4). The same modification applies in signatures.
 
 # example
 ## signing and verifying stuff
@@ -43,9 +48,9 @@ keys = {
 Generates a cryptographically-secure 32-byte seed.
 
 ## var keys = lib.createKeyPair(seed)
-Generates a keypair from the provided 32-byte seed with the following properties:
+Generates a pubkey from the provided 32-byte secret key with the following properties:
 * `keys.publicKey` - A 32 byte public key as a buffer.
-* `keys.secretKey` - A 64 byte private key as a buffer.
+* `keys.secretKey` - The secret key
 
 ## var sig = lib.sign(msg, publicKey, secretKey)
 Signs a given message of any length.

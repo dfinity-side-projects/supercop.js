@@ -5,8 +5,8 @@
 #include <emscripten.h>
 
 EMSCRIPTEN_KEEPALIVE
-void create_keypair(unsigned char *public_key, unsigned char *private_key, const unsigned char *seed){
-  ed25519_create_keypair(public_key, private_key, seed);
+void create_keypair(unsigned char *public_key, const unsigned char *private_key){
+  ed25519_create_keypair(public_key, private_key);
 }
 
 EMSCRIPTEN_KEEPALIVE

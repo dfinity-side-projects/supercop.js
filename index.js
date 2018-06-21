@@ -5,24 +5,21 @@ exports.createSeed = function(){
   return randomBytes(32)
 }
 
-exports.createKeyPair = function(seed){
-  if(!Buffer.isBuffer(seed)){
+exports.createKeyPair = function(secretKey){
+  if(!Buffer.isBuffer(secretKey)){
     throw new Error('not buffers!')
   }
-  var seedPtr = Module._malloc(32)
-  var seedBuf = new Uint8Array(Module.HEAPU8.buffer, seedPtr, 32)
+  var privKeyPtr = Module._malloc(32)
+  var privKey = new Uint8Array(Module.HEAPU8.buffer, privKeyPtr, 32)
   var pubKeyPtr = Module._malloc(32)
   var pubKey = new Uint8Array(Module.HEAPU8.buffer, pubKeyPtr, 32)
-  var privKeyPtr = Module._malloc(64)
-  var privKey = new Uint8Array(Module.HEAPU8.buffer, privKeyPtr, 64)
-  seedBuf.set(seed)
-  Module._create_keypair(pubKeyPtr, privKeyPtr, seedPtr)
-  Module._free(seedPtr)
+  privKey.set(secretKey)
+  Module._create_keypair(pubKeyPtr, privKeyPtr)
   Module._free(pubKeyPtr)
   Module._free(privKeyPtr)
   return {
     publicKey: new Buffer(pubKey),
-    secretKey: new Buffer(privKey)
+    secretKey
   }
 }
 
@@ -35,8 +32,8 @@ exports.sign = function(msg, pubKey, privKey){
   var msgArr = new Uint8Array(Module.HEAPU8.buffer, msgArrPtr, msgLen)
   var pubKeyArrPtr = Module._malloc(32)
   var pubKeyArr = new Uint8Array(Module.HEAPU8.buffer, pubKeyArrPtr, 32)
-  var privKeyArrPtr = Module._malloc(64)
-  var privKeyArr = new Uint8Array(Module.HEAPU8.buffer, privKeyArrPtr, 64)
+  var privKeyArrPtr = Module._malloc(32)
+  var privKeyArr = new Uint8Array(Module.HEAPU8.buffer, privKeyArrPtr, 32)
   var sigPtr = Module._malloc(64)
   var sig = new Uint8Array(Module.HEAPU8.buffer, sigPtr, 64)
   msgArr.set(msg)
